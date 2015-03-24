@@ -1,0 +1,120 @@
+*:/AG AM $ = call_alias('/AngelGates AddMembers '.$)
+
+*:/AG AddMember $ = call_alias('/AngelGates AddMembers '.$)
+
+*:/AG AddMembers $network $ = >>>
+	@uuid = pinfo(player(),20)
+	@networks = import('AR.AngelGates.Networks')
+	if(!array_index_exists(@networks,$network)){
+		_are('That network does not exist.')
+		die()
+	}
+	if(@networks[$network]['owner'] != @uuid){
+		_are('That gate doesn\'t belong to you.')
+		die()
+	}
+	if(@networks[$network]['type'] == 'private'){
+		_are('That network is private.')
+		die()
+	}
+	foreach(split(' ',$),@name){
+		if(!array_contains(@networks[$network]['members'],@name)){
+			array_push(@networks[$network]['members'],@name)
+			_arm(@name.' added!')
+		}else{
+			_are(@name.' already on the members list.')
+		}
+	}
+	_save('AR.AngelGates.Networks')
+<<<
+
+*:/AG RM $ = call_alias('/AngelGates RemoveMembers '.$)
+
+*:/AG RemMember $ = call_alias('/AngelGates RemoveMembers '.$)
+
+*:/AG RemMembers $ = call_alias('/AngelGates RemoveMembers '.$)
+
+*:/AG RemoveMember $ = call_alias('/AngelGates RemoveMembers '.$)
+
+*:/AG RemoveMembers $network $ = >>>
+	@uuid = pinfo(player(),20)
+	@networks = import('AR.AngelGates.Networks')
+	if(!array_index_exists(@networks,$network)){
+		_are('That network does not exist.')
+		die()
+	}
+	if(@networks[$network]['owner'] != @uuid){
+		_are('That gate doesn\'t belong to you.')
+		die()
+	}
+	if(@networks[@network]['type'] -= 'private'){
+		_are('That network is private.')
+		die()
+	}
+	foreach(split(' ',$),@name){
+		if(array_contains(@networks[$network]['members'],@name)){
+			array_remove_values(@networks[$network]['members'],@name)
+			_arm(@name.' removed!')
+		}else{
+			_are(@name.' not on list.')
+		}
+	}
+	_save('AR.AngelGates.Networks')
+<<<
+
+*:/AG Remove $gate $network = >>>
+	@uuid = pinfo(player(),20)
+	@networks = import('AR.AngelGates.Networks')
+	if(!array_index_exists(@networks,$network)){
+		die(color(c).'That network does not exist.')
+	}else{
+		if(!array_index_exists(@networks[$network]['gates'],$gate)){
+			die(color(c).'That No such gate exists on that network.')
+		}
+		if(@networks[$network]['owner'] != @uuid && !has_permission('AngelGates.Admin')){
+			die(color(c).'That network is not yours.')
+		}
+		_remove_gate($gate,$network)
+	}
+<<<
+
+*:/AG NetWipe $ = >>>
+	@uuid = pinfo(player(),20)
+	@networks = import('AR.AngelGates.Networks')
+	if(!array_index_exists(@networks,$)){
+		die(color(c).'That network does not exist.')
+	}else{
+		if(@networks[$]['owner'] != @uuid){
+			if(!has_permission('AngelGates.Admin')){
+				die(color(c).'That network is not yours.')
+			}
+		}
+		foreach(@networks[$]['gates'],@gatename,@gatedata){
+			_remove_gate(@gatename,$)
+		}
+	}
+<<<
+
+*:/AG List $network = >>>
+	@networks = import('AR.AngelGates.Networks')
+	if(!array_index_exists(@networks,$network)){
+		die(color(c).'That network does not exist.')
+	}else{
+		msg($network.' contains:')
+		foreach(@networks[$network]['gates'],@gatename,@gatedata){
+			msg('  '.@gatename)
+		}
+	}
+<<<
+
+*:/AG Listmembers $network = >>>
+	@networks = import('AR.AngelGates.Networks')
+	if(!array_index_exists(@networks,$network)){
+		die(color(c).'That network does not exist.')
+	}else{
+		msg($network.' contains:')
+		foreach(@networks[$network]['members'],@member){
+			msg('  '.@member)
+		}
+	}
+<<<
